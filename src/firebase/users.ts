@@ -1,4 +1,4 @@
-import { collection, getDocs, getDoc, doc, DocumentData } from 'firebase/firestore'
+import { collection, getDocs, getDoc, doc } from 'firebase/firestore'
 import { db } from './index'
 
 export type User = {
@@ -19,14 +19,13 @@ export async function getUsers(): Promise<User[]> {
 }
 
 export async function getUser(id: string): Promise<User | undefined> {
-  let user: User
   const docRef = doc(db, 'users', id)
   const docSnap = await getDoc(docRef)
 
   if (docSnap.exists()) {
-    const documentId = docSnap.id // この場合、uidと同じ値
-    const documentData: DocumentData = docSnap.data()
-    user = {
+    const documentId = docSnap.id
+    const documentData = docSnap.data()
+    const user: User = {
       id: documentId,
       name: documentData['name'],
     }
